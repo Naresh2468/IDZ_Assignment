@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Assignment.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Assignment.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\AssignmentEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Assignment">
+      <UniqueIdentifier>{4A52EA4B-2F34-3315-B595-3D03438728B0}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Assignment\Assignment.Build.cs">
+      <Filter>Source\Assignment</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Assignment\Assignment.cpp">
+      <Filter>Source\Assignment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Assignment\Assignment.h">
+      <Filter>Source\Assignment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Assignment\AssignmentCharacter.cpp">
+      <Filter>Source\Assignment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Assignment\AssignmentCharacter.h">
+      <Filter>Source\Assignment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Assignment\AssignmentGameMode.cpp">
+      <Filter>Source\Assignment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Assignment\AssignmentGameMode.h">
+      <Filter>Source\Assignment</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

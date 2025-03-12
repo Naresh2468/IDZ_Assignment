@@ -1,0 +1,3 @@
+// PCH for Runtime/CoreUObject/Public/CoreUObjectSharedPCH.h
+#include "D:/Projects/UnrealEngineProjects/UE5/3D/Assignment/Assignment/Intermediate/Build/Win64/x64/AssignmentEditor/Development/CoreUObject/SharedDefinitions.CoreUObject.RTTI.Cpp20.h"
+#include "Runtime/CoreUObject/Public/CoreUObjectSharedPCH.h"

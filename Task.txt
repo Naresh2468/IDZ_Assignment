@@ -1,0 +1,11 @@
+Unreal Engine Assignment:
+(Coding):
+
+1.Use the Default Third Person Character and add 8 degree motion on [WASD] keys. Add Sprinting and Walking Hold/Toggle on [Left Shift].[Done][Animation Done].
+2.Create Melee Weapon Attacks - Add a sword with Light attacks mapped to the Left Mouse Button.
+3.Use free animations from the Unreal Engine Marketplace or Mixamo (depending on your preference).[Done]
+4.Use the default Third Person Map to test the game.
+(Optional) Add Extra features.[Done].
+Time: 1-2 days
+(Optional) Generate a Windows Build for the game.
+Record a video of the gameplay and also send the zipped ue4/ue5 project to us for evaluation.
