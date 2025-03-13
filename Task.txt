@@ -9,3 +9,13 @@ Unreal Engine Assignment:
 Time: 1-2 days
 (Optional) Generate a Windows Build for the game.
 Record a video of the gameplay and also send the zipped ue4/ue5 project to us for evaluation.
+
+
+
+1.Simple melee attack.
+2.Combo melee attack system.
+3.Animation of previous.
+4.Do not need any melee extra animation for motion.
+5.Interaction of sword simple one.
+6.After the player interact sword attach to the player holster and equipd sowrd then attack procedure.
+7.UI AND DEMO DISPLAY OF FEATURE.
