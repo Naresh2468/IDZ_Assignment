@@ -73,6 +73,12 @@ class AAssignmentCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* PlayerInteract;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PrimaryWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MeleeAttack;
+
 #pragma endregion
 
 
@@ -102,6 +108,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | InteractComponent ")
 	float SphereRadius = 60.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | InteractComponent ")
+	bool canMove;
+
 
 
 	UFUNCTION()
@@ -121,6 +130,15 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void F_InteractObjects(AActor* result);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void F_TurnInPlace();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void F_PrimaryEquipped();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void F_SwordAttack();
 
 	UFUNCTION()
 	bool CheckState(EMovementState state);

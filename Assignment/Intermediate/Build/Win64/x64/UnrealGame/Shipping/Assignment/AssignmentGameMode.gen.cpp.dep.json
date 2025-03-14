@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\unrealgame\\inc\\assignment\\uht\\assignmentgamemode.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\x64\\assignment\\shipping\\engine\\sharedpch.engine.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\x64\\unrealgame\\shipping\\assignment\\definitions.assignment.h",
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\source\\assignment\\assignmentgamemode.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealgame\\inc\\engine\\uht\\serverstatreplicator.generated.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealgame\\inc\\engine\\uht\\gamemodebase.generated.h",
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\unrealgame\\inc\\assignment\\uht\\assignmentgamemode.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

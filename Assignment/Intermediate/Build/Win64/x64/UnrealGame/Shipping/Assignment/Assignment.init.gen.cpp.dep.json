@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\unrealgame\\inc\\assignment\\uht\\assignment.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\x64\\assignment\\shipping\\engine\\sharedpch.engine.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\x64\\unrealgame\\shipping\\assignment\\definitions.assignment.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

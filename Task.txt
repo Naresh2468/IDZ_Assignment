@@ -33,5 +33,10 @@ Reset of things
 5.Camera Shake.(Done).
 CHECK Sowrd attack if not equipeed.(Done).
 Change the IA_keys TO INSIDE CPP AND IMPLMENT ABLE EVENTS.
-6.AI.
+6.AI.(Done).
 7.Player Health bar.(DONE)(Check by Damage.)
+
+
+Turn in place (Done)
+Blood effect 
+sword visibility.

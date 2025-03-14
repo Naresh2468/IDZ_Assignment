@@ -51,7 +51,8 @@ AAssignmentCharacter::AAssignmentCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-	SphereRadius = 60.0f;
+	SphereRadius = 60.0f; 
+	canMove = true;
 	CurrentMovementState.Add(EMovementState::Walking);
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -93,10 +94,14 @@ void AAssignmentCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(PlayerCrouch, ETriggerEvent::Triggered, this, &AAssignmentCharacter::F_PlayerCrouch); //Crouching
 	
 		EnhancedInputComponent->BindAction(PlayerInteract, ETriggerEvent::Started, this, &AAssignmentCharacter::F_Interact);
+	
+		EnhancedInputComponent->BindAction(PrimaryWeapon, ETriggerEvent::Started, this, &AAssignmentCharacter::F_PrimaryEquipped);
+
+		EnhancedInputComponent->BindAction(MeleeAttack, ETriggerEvent::Started, this, &AAssignmentCharacter::F_SwordAttack);
 	}
 	else
 	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		//UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
 
@@ -105,7 +110,7 @@ void AAssignmentCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && canMove)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -120,6 +125,7 @@ void AAssignmentCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+		
 	}
 }
 
@@ -132,6 +138,7 @@ void AAssignmentCharacter::Look(const FInputActionValue& Value)
 	{
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+		F_TurnInPlace();
 	}
 }
 void AAssignmentCharacter::F_PlayerCrouch(const FInputActionValue& Value)
@@ -161,13 +168,10 @@ void AAssignmentCharacter::F_PlayerSprint(const FInputActionValue& Value)
 		// Add Running at the next index when key is pressed
 		int32 CurrentValue = CurrentMovementState.Num(); // Next index (append)
 		SetArrayElement(CurrentValue, EMovementState::Running, true);
-		UE_LOG(LogTemp, Warning, TEXT("Sprint key pressed: Added Running"));
 	}
 	else if (!bIsSprinting)
 	{
-
 		CurrentMovementState.Remove(EMovementState::Running);
-		UE_LOG(LogTemp, Warning, TEXT("Sprint key released: Removed Running"));
 	}
 	F_Movement(); // Update movement based on new state
 }
@@ -176,7 +180,7 @@ void AAssignmentCharacter::SetArrayElement(int32 Index, EMovementState NewValue,
 {
 	if (Index < 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SetArrayElement: Index %d is invalid (negative)."), Index);
+		//UE_LOG(LogTemp, Warning, TEXT("SetArrayElement: Index %d is invalid (negative)."), Index);
 		return;
 	}
 	if (Index < CurrentMovementState.Num())
@@ -191,7 +195,7 @@ void AAssignmentCharacter::SetArrayElement(int32 Index, EMovementState NewValue,
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SetArrayElement: Index %d out of bounds (array size %d), and bSizeToFit is false."), Index, CurrentMovementState.Num());
+		/*UE_LOG(LogTemp, Warning, TEXT("SetArrayElement: Index %d out of bounds (array size %d), and bSizeToFit is false."), Index, CurrentMovementState.Num());*/
 		return;
 	}
 }
@@ -250,8 +254,8 @@ void AAssignmentCharacter::F_UpdateSpeedMovement()
 		break;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Movement speed set to %f based on state %d"),
-		GetCharacterMovement()->MaxWalkSpeed, static_cast<int32>(LastState)); //Checking state.
+	//UE_LOG(LogTemp, Log, TEXT("Movement speed set to %f based on state %d"),
+	//	GetCharacterMovement()->MaxWalkSpeed, static_cast<int32>(LastState)); //Checking state.
 }
 
 void AAssignmentCharacter::F_Interact()
@@ -279,7 +283,7 @@ void AAssignmentCharacter::F_Interact()
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Hit Actor: %s"), *HitActor->GetName());
+			/*UE_LOG(LogTemp, Log, TEXT("Hit Actor: %s"), *HitActor->GetName());*/
 			F_InteractObjects(HitActor);
 		}
 	}

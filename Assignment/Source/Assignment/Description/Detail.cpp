@@ -10,6 +10,7 @@ ADetail::ADetail()
 	PrimaryActorTick.bCanEverTick = true;
   
     Details = CreateDefaultSubobject<UTextRenderComponent>(TEXT("DetailsText"));
+    Details->SetupAttachment(RootComponent);
     TextSize = 30.0f;
     TextColor = FColor::White;
     EHTA = EHorizTextAligment::EHTA_Left;
@@ -34,8 +35,7 @@ void ADetail::TextDetail()
     if (Details)
     {
 
-        Details->SetupAttachment(RootComponent);
-
+       
 
 
         Details->SetWorldSize(TextSize);
