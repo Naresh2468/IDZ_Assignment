@@ -12,10 +12,26 @@ Record a video of the gameplay and also send the zipped ue4/ue5 project to us fo
 
 
 
-1.Simple melee attack.
-2.Combo melee attack system.
-3.Animation of previous.
-4.Do not need any melee extra animation for motion.
-5.Interaction of sword simple one.
-6.After the player interact sword attach to the player holster and equipd sowrd then attack procedure.
+1.Simple melee attack.(Done)
+2.Combo melee attack system.(Done)
+3.Animation of previous.(Done)
+4.Do not need any melee extra animation for motion.(Done).
+5.Interaction of sword simple one.(Done).
+6.After the player interact sword attach to the player holster and equipd sowrd then attack procedure.(Done).
 7.UI AND DEMO DISPLAY OF FEATURE.
+
+CPP
+1.Basic movement sprint and crouch.
+2.Wall text.
+3.interaction.
+
+
+Reset of things
+1.Gameover Screen and reset the propotype(no need).
+3.Sounds.(Done).
+4.Damage Effects(Done).
+5.Camera Shake.(Done).
+CHECK Sowrd attack if not equipeed.(Done).
+Change the IA_keys TO INSIDE CPP AND IMPLMENT ABLE EVENTS.
+6.AI.
+7.Player Health bar.(DONE)(Check by Damage.)

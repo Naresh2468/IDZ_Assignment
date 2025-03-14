@@ -15,10 +15,23 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+UENUM(BlueprintType)
+enum class EMovementState : uint8
+{
+	Idle UMETA(DisplayName = "Idle"),
+	Walking UMETA(DisplayName = "Walking"),
+	Running UMETA(DisplayName = "Running"),
+	Crouching UMETA(DisplayName = "Crouching")
+};
+
+
 UCLASS(config=Game)
 class AAssignmentCharacter : public ACharacter
 {
 	GENERATED_BODY()
+
+
+#pragma region C O M P O N E N T S
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -27,7 +40,14 @@ class AAssignmentCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* InteractPoint;
+
+#pragma endregion
+
+#pragma region I N P U T 
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
@@ -44,9 +64,66 @@ class AAssignmentCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PlayerSprint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PlayerCrouch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PlayerInteract;
+
+#pragma endregion
+
+
 public:
 	AAssignmentCharacter();
 	
+	// Current movement state
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Player | Movement") // Player state will change based on enum.
+	TArray<EMovementState> CurrentMovementState;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | Movement | Speed")
+	float IdleSpeed = 0.0f; // No movement when idle
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | Movement | Speed")
+	float WalkSpeed = 250.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | Movement | Speed")
+	float RunSpeed = 500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | Movement | Speed")
+	float CrouchSpeed = 240.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | InteractComponent ")
+	float InteractDistance = 400.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | InteractComponent ")
+	float SphereRadius = 60.0f;
+
+
+
+	UFUNCTION()
+	void F_PlayerSprint(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void F_PlayerCrouch(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void F_UpdateSpeedMovement();
+
+	UFUNCTION()
+	void F_Movement();
+
+	UFUNCTION()
+	void F_Interact();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void F_InteractObjects(AActor* result);
+
+	UFUNCTION()
+	bool CheckState(EMovementState state);
 
 protected:
 
@@ -55,7 +132,10 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+	
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void SetArrayElement(int32 Index, EMovementState NewValue, bool bSizeToFit = false);
 
 protected:
 

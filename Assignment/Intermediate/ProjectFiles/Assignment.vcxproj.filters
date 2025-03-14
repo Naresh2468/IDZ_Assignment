@@ -11,6 +11,8 @@
     <None Include="..\..\Source\AssignmentEditor.Target.cs">
       <Filter>Source</Filter>
     </None>
+    <None Include="..\..\.vsconfig" />
+    <None Include="..\..\UpgradeLog.htm" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -52,6 +54,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Assignment\AssignmentGameMode.h">
       <Filter>Source\Assignment</Filter>
+    </ClCompile>
+    <Filter Include="Source\Assignment\Description">
+      <UniqueIdentifier>{6C99AD42-84EB-3C6F-B110-ABDA9275E2DD}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Assignment\Description\Detail.cpp">
+      <Filter>Source\Assignment\Description</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Assignment\Description\Detail.h">
+      <Filter>Source\Assignment\Description</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

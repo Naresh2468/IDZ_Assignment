@@ -20,7 +20,7 @@ AAssignmentCharacter::AAssignmentCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -42,6 +42,8 @@ AAssignmentCharacter::AAssignmentCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
+	InteractPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Interact"));
+	InteractPoint->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
@@ -49,7 +51,8 @@ AAssignmentCharacter::AAssignmentCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
+	SphereRadius = 60.0f;
+	CurrentMovementState.Add(EMovementState::Walking);
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -73,18 +76,23 @@ void AAssignmentCharacter::NotifyControllerChanged()
 
 void AAssignmentCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// Set up action bindings
+	// Set up all action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAssignmentCharacter::Move);
 
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAssignmentCharacter::Look);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);// Jumping
+
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping); //Stop Jumping
+
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAssignmentCharacter::Move);//Moving
+
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAssignmentCharacter::Look);// Looking
+
+		EnhancedInputComponent->BindAction(PlayerSprint, ETriggerEvent::Triggered, this, &AAssignmentCharacter::F_PlayerSprint); //Sprinting
+
+		EnhancedInputComponent->BindAction(PlayerCrouch, ETriggerEvent::Triggered, this, &AAssignmentCharacter::F_PlayerCrouch); //Crouching
+	
+		EnhancedInputComponent->BindAction(PlayerInteract, ETriggerEvent::Started, this, &AAssignmentCharacter::F_Interact);
 	}
 	else
 	{
@@ -105,7 +113,7 @@ void AAssignmentCharacter::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
@@ -122,8 +130,157 @@ void AAssignmentCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+void AAssignmentCharacter::F_PlayerCrouch(const FInputActionValue& Value)
+{
+	bool bIsCrouch = Value.Get<bool>();
+
+	if (bIsCrouch)
+	{
+		int32 CurrentValue = CurrentMovementState.Num(); // Append at next index
+		SetArrayElement(CurrentValue, EMovementState::Crouching, true);
+		
+	}
+	else if (!bIsCrouch && CurrentMovementState.Contains(EMovementState::Crouching))
+	{
+		CurrentMovementState.Remove(EMovementState::Crouching);
+	}
+	F_Movement(); // Update movement state
+
+}
+
+void AAssignmentCharacter::F_PlayerSprint(const FInputActionValue& Value)
+{
+	bool bIsSprinting = Value.Get<bool>();
+
+	if (bIsSprinting && !CurrentMovementState.Contains(EMovementState::Crouching))
+	{
+		// Add Running at the next index when key is pressed
+		int32 CurrentValue = CurrentMovementState.Num(); // Next index (append)
+		SetArrayElement(CurrentValue, EMovementState::Running, true);
+		UE_LOG(LogTemp, Warning, TEXT("Sprint key pressed: Added Running"));
+	}
+	else if (!bIsSprinting)
+	{
+
+		CurrentMovementState.Remove(EMovementState::Running);
+		UE_LOG(LogTemp, Warning, TEXT("Sprint key released: Removed Running"));
+	}
+	F_Movement(); // Update movement based on new state
+}
+
+void AAssignmentCharacter::SetArrayElement(int32 Index, EMovementState NewValue, bool bSizeToFit)
+{
+	if (Index < 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetArrayElement: Index %d is invalid (negative)."), Index);
+		return;
+	}
+	if (Index < CurrentMovementState.Num())
+	{
+		CurrentMovementState[Index] = NewValue;
+	}
+	else if (bSizeToFit)
+	{
+		int32 ElementsToAdd = Index - CurrentMovementState.Num() + 1;
+		CurrentMovementState.AddZeroed(ElementsToAdd);
+		CurrentMovementState[Index] = NewValue;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetArrayElement: Index %d out of bounds (array size %d), and bSizeToFit is false."), Index, CurrentMovementState.Num());
+		return;
+	}
+}
+
+void AAssignmentCharacter::F_Movement()
+{
+	if (CurrentMovementState.Num() > 0)
+	{
+		if (CheckState(EMovementState::Crouching))
+		{
+			Crouch();
+		}
+		else
+		{
+			UnCrouch();
+		}
+		F_UpdateSpeedMovement();
+	}
+}
+
+
+
+bool AAssignmentCharacter::CheckState(EMovementState state)
+{
+	if (CurrentMovementState.Num() > 0)
+	{
+		return CurrentMovementState.Last() == state;
+	}
+	return false; // Fixed missing return
+}
+
+void AAssignmentCharacter::F_UpdateSpeedMovement()
+{
+	if (CurrentMovementState.Num() == 0)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = IdleSpeed;
+		return;
+	}
+	EMovementState LastState = CurrentMovementState.Last();
+	switch (LastState)// Set speed based on the last state
+	{
+	case EMovementState::Idle:
+		GetCharacterMovement()->MaxWalkSpeed = IdleSpeed;
+		break;
+	case EMovementState::Walking:
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+		break;
+	case EMovementState::Running:
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+		break;
+	case EMovementState::Crouching:
+		GetCharacterMovement()->MaxWalkSpeed = CrouchSpeed;
+		break;
+	default:
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed; // Fallback
+		break;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Movement speed set to %f based on state %d"),
+		GetCharacterMovement()->MaxWalkSpeed, static_cast<int32>(LastState)); //Checking state.
+}
+
+void AAssignmentCharacter::F_Interact()
+{
+	FVector InitialPoint = InteractPoint->GetComponentLocation();
+	FVector ForwardVector =  FollowCamera->GetForwardVector();
+	FVector EndPoint = InitialPoint + (ForwardVector * InteractDistance);
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(GetOwner());
+	FCollisionObjectQueryParams ObjectParams(ECollisionChannel::ECC_WorldStatic);
+	FHitResult HitResult;
+
+	bool bHit = GetWorld()->SweepSingleByObjectType(
+		HitResult,              
+		InitialPoint,           
+		EndPoint,               
+		FQuat::Identity,        
+		ObjectParams,           
+		FCollisionShape::MakeSphere(SphereRadius), 
+		QueryParams            
+	);
+	if (bHit)
+	{
+		// Access the hit object
+		AActor* HitActor = HitResult.GetActor();
+		if (HitActor)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Hit Actor: %s"), *HitActor->GetName());
+			F_InteractObjects(HitActor);
+		}
 	}
 }

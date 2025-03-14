@@ -1,0 +1,30 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\source\\assignment\\assignmentgamemode.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\x64\\assignmenteditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\assignment\\definitions.assignment.h",
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\source\\assignment\\assignmentgamemode.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\serverstatreplicator.generated.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamemodebase.generated.h",
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\unrealeditor\\inc\\assignment\\uht\\assignmentgamemode.generated.h",
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\source\\assignment\\assignmentcharacter.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\character.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\net\\core\\public\\net\\core\\nettoken\\nettokenexportcontext.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\experimental\\iris\\core\\public\\iris\\serialization\\irisobjectreferencepackagemap.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\iriscore\\uht\\irisobjectreferencepackagemap.generated.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\charactermovementreplication.generated.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\rootmotionsource.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\rootmotionsource.generated.h",
+            "d:\\softwares\\unrealengine\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\character.generated.h",
+            "d:\\projects\\unrealengineprojects\\ue5\\3d\\assignment\\assignment\\intermediate\\build\\win64\\unrealeditor\\inc\\assignment\\uht\\assignmentcharacter.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
